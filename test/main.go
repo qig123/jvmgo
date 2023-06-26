@@ -2,27 +2,30 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 )
 
+type Person struct {
+	name string
+	age  int
+}
+
+// 值类型接收者
+func (p Person) SayHi() {
+	fmt.Printf("Hi, my name is %s and I'm %d years old.\n", p.name, p.age)
+}
+
+// 指针类型接收者
+func (p *Person) SetAge(age int) {
+	p.age = age
+}
 func main() {
-	root := "C:\\Program Files\\Java\\jdk1.8.0_241\\jre\\lib\\" // 指定目录路径
-	files, err := filepath.Glob(filepath.Join(root, "*.jar"))
-	if err != nil {
-		fmt.Printf("Error globbing the path %q: %v", root, err)
-		return
-	}
-
-	for _, file := range files {
-		fileInfo, err := os.Stat(file)
-		if err != nil {
-			fmt.Printf("Error getting file info for %q: %v", file, err)
-			continue
-		}
-
-		if !fileInfo.IsDir() {
-			fmt.Println(file)
-		}
-	}
+	p := Person{name: "Alice", age: 30}
+	p.SayHi() // 输出 "Hi, my name is Alice and I'm 30 years old."
+	p.SetAge(31)
+	fmt.Println(p.age) // 输出31
+	p2 := &Person{}
+	p2.age = 10
+	p2.name = "Apple"
+	p2.SayHi()
+	fmt.Println(*p2)
 }
